@@ -11,7 +11,7 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
 
     month = format_month(datetime.now().month)
     year = str(datetime.now().year)
-    driver = webdriver.Safari()
+    driver = webdriver.Safari() # EDIT: If you don't have Safari, use the webdriver of your browser. 
 
     while int(year) >= 2008: # there doesn't seem to be any records before 2008 on the website.
         secondary_url = f"&period={year}-{month}-01&rating={rating_type}"
