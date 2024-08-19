@@ -22,7 +22,7 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
         driver.get(URL)
 
         # wait for the page to load
-        sleep(1)
+        sleep(1) # Change this number to whatever number you feel like. I think it will probably work if you shorten it to even .1 or .2...
 
         # Get the page source after the dynamic content has loaded
         page_source = driver.page_source
