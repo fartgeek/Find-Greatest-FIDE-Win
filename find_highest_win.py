@@ -3,6 +3,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from time import sleep
 
+
 games = []
 
 def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
@@ -12,7 +13,7 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
     year = str(datetime.now().year)
     driver = webdriver.Safari()
 
-    while int(year) >= 2004:
+    while int(year) >= 2008: # there doesn't seem to be any records before 2008 on the website.
         secondary_url = f"&period={year}-{month}-01&rating={rating_type}"
         URL = main_url + secondary_url
         print(f"Checking URL: {URL}")
@@ -46,6 +47,7 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
                     if len(columns) >= 8:  # Ensure the row has the expected number of columns
                         opponent_name = columns[0].text.strip()  # Opponent's name
                         opponent_rating = columns[3].text.strip()  # Opponent's rating
+                        opponent_rating = opponent_rating.split()[0]
                         game_result = columns[5].text.strip()  # Game result
 
                         # Store the game data
@@ -53,8 +55,8 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
                             games.append({
                                 'opponent': opponent_name,
                                 'rating': opponent_rating,
-                                'month' : month,
-                                'year' : year
+                                'month': month,
+                                'year': year
                             })
 
             else:
@@ -69,13 +71,18 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
     driver.quit()
     opponent_name = ""
     highest_rating = 0
+    month = ""
+    year = ""
     for game in games:
-        if game.get('rating') > highest_rating:
-            highest_rating = game.get('rating')
+        if int(game.get('rating')) > highest_rating:
+            highest_rating = int(game.get('rating'))
             opponent_name = game.get('opponent')
+            month = game.get('month')
+            year = game.get('year')
+
         print(game)
 
-    print("Best WIN:", opponent_name, highest_rating)
+    print("Best WIN:", opponent_name, highest_rating, month, year)
 
 
 
@@ -94,3 +101,4 @@ def go_one_month_back(month, year):
 if __name__ == "__main__":
     FIDE_ID = '2039877'  # Example: Levy Rozman. Replace with desired FIDE ID.
     main(FIDE_ID)
+
