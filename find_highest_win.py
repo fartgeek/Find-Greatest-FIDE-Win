@@ -47,7 +47,8 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
                     if len(columns) >= 8:  # Ensure the row has the expected number of columns
                         opponent_name = columns[0].text.strip()  # Opponent's name
                         opponent_rating = columns[3].text.strip()  # Opponent's rating
-                        opponent_rating = opponent_rating.split()[0]
+                        # If the opponent's rating is more than 400 points higher or lower, then the rating looks like this: '1943 *'
+                        opponent_rating = opponent_rating.split()[0]  # 1943 * -> 1943
                         game_result = columns[5].text.strip()  # Game result
 
                         # Store the game data
