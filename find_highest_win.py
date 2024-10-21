@@ -18,27 +18,21 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
         URL = main_url + secondary_url
         print(f"Checking URL: {URL}")
 
-        # Open the webpage
         driver.get(URL)
 
-        # wait for the page to load
+       
         sleep(1) # Change this number to whatever number you feel like. I think it will probably work if you shorten it to even .1 or .2...
 
-        # Get the page source after the dynamic content has loaded
         page_source = driver.page_source
 
-        # Parse the loaded page source with BeautifulSoup
         soup = BeautifulSoup(page_source, 'html.parser')
 
-        # Find the div with class 'calc_output'
         calc_output = soup.find('div', class_='calc_output')
 
         if calc_output:
-            # Find the table within this div
             table = calc_output.find('table', class_='calc_table')
 
             if table:
-                # Initialize a list to store the results
 
                 # Iterate over each row in the table (skipping the first four header rows)
                 rows = table.find_all('tr')[4:]
@@ -51,7 +45,6 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
                         opponent_rating = opponent_rating.split()[0]  # 1943 * -> 1943
                         game_result = columns[5].text.strip()  # Game result
 
-                        # Store the game data
                         if game_result == '1.00':
                             games.append({
                                 'opponent': opponent_name,
@@ -65,10 +58,8 @@ def main(FIDE_ID, rating_type=0):  # 0 is standard, 1 is rapid, and 2 is blitz
         else:
             print("Div with class 'calc_output' not found on the page.")
 
-        # Update month and year
         month, year = go_one_month_back(month, year)
 
-    # Close the browser
     driver.quit()
     opponent_name = ""
     highest_rating = 0
